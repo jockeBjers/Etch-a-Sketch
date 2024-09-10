@@ -1,8 +1,9 @@
 const container = document.querySelector(".container");
-const size = 600;
+const size = 400;
 let num = 16;
 let borderEnabled = true;
 let hoverColor = "black";
+let clickmode = false;
 
 const colorPicker = document.getElementById("colorPicker");
 const input = document.getElementById("input");
@@ -30,6 +31,12 @@ changeColor.addEventListener("click", () => {
 
 });
 
+const toggleMouse = document.querySelector(".click-mouse");
+toggleMouse.addEventListener("click", () => {
+    clickmode = !clickmode;
+    toggleMouse.textContent = clickmode ? "CLICK" : "HOVER";
+});
+
 const borderButton = document.querySelector(".border");
 borderButton.addEventListener("click", () => {
     const squares = document.querySelectorAll(".box");
@@ -44,7 +51,7 @@ borderButton.addEventListener("click", () => {
 });
 
 function createBoxes(num) {
-    const pixelSize = 400 / num;
+    const pixelSize = size / num;
 
     for (let i = 0; i < num; i++) {
         let div = document.createElement("div");
@@ -58,16 +65,21 @@ function createBoxes(num) {
                 box-sizing: border-box; border: 1px solid #dd976f`);
             div.append(square);
 
-            square.addEventListener("mouseover", () => {
-                square.style.backgroundColor = hoverColor;
+            square.addEventListener("click", () => {
+                if (clickmode) {
+                    square.style.backgroundColor = hoverColor;
+                }
             });
 
+            square.addEventListener("mouseover", () => {
+                if (!clickmode) {
+                    square.style.backgroundColor = hoverColor;
+                }
+            });
         }
-
         container.append(div);
     }
 }
-
 
 const removeBoxes = () => {
     while (container.lastElementChild) {
