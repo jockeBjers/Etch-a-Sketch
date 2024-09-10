@@ -13,15 +13,24 @@
 
 
     <h1> ETCH A SKETCH</h1>
-    <button> CHANGE GRID</button>
+    <div class="outerbox">
+        <nav class="buttons">
+            <div class="grid-row">
+                <button class="change-grid"> CHANGE GRID</button>
+                <input type="number" id="input" min="1" max="100" value="16" />
+            </div>
+            <button class="border">BORDER</button>
+            <button class="reset">RESET</button>
+            <button class="change-color">CHANGE COLOR</button>
+            <input type="color" id="colorPicker" style="display: none;" />
+        </nav>
 
-    
         <div class="container">
 
 
         </div>
-    
 
+    </div>
 
 
 
