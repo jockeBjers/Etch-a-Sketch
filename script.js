@@ -4,6 +4,7 @@ let num = 16;
 let borderEnabled = true;
 let hoverColor = "black";
 let clickmode = false;
+let isMouseDown = false; 
 
 const colorPicker = document.getElementById("colorPicker");
 const input = document.getElementById("input");
@@ -22,21 +23,40 @@ reset.addEventListener("click", () => {
     createBoxes(16);
 });
 
-const changeColor = document.querySelector(".change-color");
-changeColor.addEventListener("click", () => {
-    colorPicker.click();
-    colorPicker.addEventListener("input", (e) => {
-        hoverColor = e.target.value;
-    });
-
+const pickr = Pickr.create({
+    el: '#color-picker-container',
+    theme: 'classic', 
+    default: '#000000', 
+    components: {   
+        opacity: true,
+        hue: true,
+        inline: true,
+        interaction: {
+        }
+    }
 });
 
-const toggleMouse = document.querySelector(".click-mouse");
-toggleMouse.addEventListener("click", () => {
-    clickmode = !clickmode;
-    toggleMouse.textContent = clickmode ? "CLICK" : "HOVER";
+pickr.show();
+
+pickr.on('hide', (instance) => {
+    instance.show(); 
 });
 
+pickr.on('change', (color) => {
+    hoverColor = color.toHEXA().toString();  
+});
+
+document.addEventListener("mousedown", (e) => {
+    if (e.button === 0) { 
+        isMouseDown = true;
+    } 
+});
+
+document.addEventListener("mouseup", (e) => {
+    if (e.button === 0) { 
+        isMouseDown = false;
+    } 
+});
 const borderButton = document.querySelector(".border");
 borderButton.addEventListener("click", () => {
     const squares = document.querySelectorAll(".box");
@@ -52,7 +72,7 @@ borderButton.addEventListener("click", () => {
 
 function createBoxes(num) {
     const pixelSize = size / num;
-
+    
     for (let i = 0; i < num; i++) {
         let div = document.createElement("div");
         div.classList.add("div");
@@ -65,14 +85,14 @@ function createBoxes(num) {
                 box-sizing: border-box; border: 1px solid #dd976f`);
             div.append(square);
 
-            square.addEventListener("click", () => {
-                if (clickmode) {
-                    square.style.backgroundColor = hoverColor;
-                }
+              // Change color on press
+              square.addEventListener("mousedown", () => {
+                square.style.backgroundColor = hoverColor;
             });
 
+            // Change color on mouseover when mouse button is held down
             square.addEventListener("mouseover", () => {
-                if (!clickmode) {
+                if (isMouseDown) {
                     square.style.backgroundColor = hoverColor;
                 }
             });
