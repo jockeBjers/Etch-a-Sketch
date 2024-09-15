@@ -1,26 +1,28 @@
 const gridSize = 400;
-let num = 16;
+let standardSize = 16;
 let isBorderVisible = true;
 let hoverColor = "black";
 let isMouseDown = false;
 
 const container = document.querySelector(".container");
-const borderButton = document.querySelector(".border");
-const resetGrid = document.querySelector(".reset");
+const toggleBorderBtn = document.querySelector(".border");
+const resetGridBtn = document.querySelector(".reset");
+const changeGridBtn = document.querySelector(".change-grid");
 const input = document.getElementById("input");
-const changeGrid = document.querySelector(".change-grid");
 
 // changing grid size depending on input
-changeGrid.addEventListener("click", () => {
+changeGridBtn.addEventListener("click", () => {
     num = parseInt(input.value);
-    if (num <= 0 || num > 100) return;
-    removeBoxes();
+    if (num <= 0 || num > 100 && num !== num) return;
+    resetGrid();
     generateGrid(num);
 });
 
-resetGrid.addEventListener("click", () => {
-    removeBoxes();
-    generateGrid(16);
+//
+resetGridBtn.addEventListener("click", () => {
+    input.value = standardSize;
+    resetGrid();
+    generateGrid(standardSize);
 });
 // Initializing the pickr library
 const colorPicker = Pickr.create({
@@ -57,7 +59,7 @@ document.addEventListener("mouseup", (e) => {
 });
 
 //Toggle border on / off 
-borderButton.addEventListener("click", () => {
+toggleBorderBtn.addEventListener("click", () => {
     isBorderVisible = !isBorderVisible;
     document.querySelectorAll(".box").forEach(square => {
         square.classList.toggle('no-border', !isBorderVisible);
@@ -77,8 +79,6 @@ function generateGrid(num) {
             square.classList.add("box");
             square.style.width = `${pixelSize}px`;
             square.style.height = `${pixelSize}px`;
-
-
             // Change color on press
             square.addEventListener("mousedown", () => {
                 square.style.backgroundColor = hoverColor;
@@ -96,12 +96,11 @@ function generateGrid(num) {
     }
 }
 
-const removeBoxes = () => {
+const resetGrid = () => {
     while (container.lastElementChild) {
         container.removeChild(container.lastElementChild);
     }
 };
 
-
 //Initialize with a default grid of 16x16
-generateGrid(16);
+generateGrid(standardSize);
